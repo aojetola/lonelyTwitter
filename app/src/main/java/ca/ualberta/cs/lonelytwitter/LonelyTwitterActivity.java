@@ -2,12 +2,14 @@ package ca.ualberta.cs.lonelytwitter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +43,7 @@ public class LonelyTwitterActivity extends Activity {
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
+		Button clearButton = (Button) findViewById(R.id.clear);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +61,27 @@ public class LonelyTwitterActivity extends Activity {
 				saveInFile();
 
 			}
+		});
+
+		clearButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				tweetlist.removeAll(tweetlist);
+				adapter.notifyDataSetChanged();
+				PrintWriter writer = null;
+
+				// https://stackoverflow.com/questions/6994518/how-to-delete-the-content-of-text-file-without-deleting-itself
+				//24.1.2018
+
+				try {
+					writer = new PrintWriter(FILENAME);
+					writer.print("");
+					writer.close();
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+
 		});
 	}
 
